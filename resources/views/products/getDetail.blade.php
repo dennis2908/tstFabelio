@@ -19,7 +19,7 @@
 					<div class="col-md-12" style='margin-top:10px'>
                       <a href="{{route('product.allData')}}" class="btn btn-lg btn-apecsa-red">
                         <i class="fa fa-globe"></i>
-                        Back
+                        All Data
                       </a>
                     </div>
             </div>
