@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Support\Str;
+$DATABASE_URL = parse_url(getenv("
+postgres://uietngmrsbnujv:ade3e2207e139ca60f539af7cbe902f2b47c2336860a3a5d22dd13caf1002309@ec2-34-192-30-15.compute-1.amazonaws.com:5432/d9esll2u23ol8n
+"));
 
 return [
 
@@ -15,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +39,6 @@ return [
 
         'sqlite' => [
             'driver' => 'sqlite',
-            'url' => env('DATABASE_URL'),
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
@@ -45,7 +46,6 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),
@@ -58,29 +58,23 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
         ],
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
+			'host' => parse_url(env('DATABASE_URL'), PHP_URL_HOST),
+			'port' => parse_url(env('DATABASE_URL'), PHP_URL_PORT),
+			'database' => ltrim(parse_url(env('DATABASE_URL'), PHP_URL_PATH), '/'),
+			'username' => parse_url(env('DATABASE_URL'), PHP_URL_USER),
+			'password' => parse_url(env('DATABASE_URL'), PHP_URL_PASS),
+			'charset' => 'utf8',
+			'prefix' => '',
+			'schema' => 'public',
+			'sslmode' => 'prefer',
         ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '1433'),
             'database' => env('DB_DATABASE', 'forge'),
@@ -119,12 +113,7 @@ return [
 
     'redis' => [
 
-        'client' => env('REDIS_CLIENT', 'predis'),
-
-        'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'predis'),
-            'prefix' => Str::slug(env('APP_NAME', 'laravel'), '_').'_database_',
-        ],
+        'client' => 'predis',
 
         'default' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
