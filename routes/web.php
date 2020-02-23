@@ -11,6 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/','ProductController@formInsert')->name('product.formInsert');
+Route::post('/insertData','ProductController@insertData')->name('product.insertData');
+Route::get('/allData','ProductController@allData')->name('product.allData');
+Route::get('/getDetail/{id}','ProductController@getDetail')->name('product.getDetail');
